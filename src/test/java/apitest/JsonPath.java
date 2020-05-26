@@ -1,4 +1,4 @@
-package com.testfan.json;
+package apitest;
 
 import java.util.List;
 
@@ -32,10 +32,12 @@ public class JsonPath {
                 "    }\n" +
                 "}";
 	    System.out.println(jsonStr);
-	    //第一本书title
-        String title = (String) JSONPath.read(jsonStr, "store.book[0].title");
+	    // 判断是否为json
+        System.out.println(JSON.isValid(jsonStr));
+	    //通过jsonpath路径获取对应的关键字：第一本书title
+        String title = (String) JSONPath.read(jsonStr,"store.book[0].title");
         System.out.println(title);
-        
+        // 获取数组,指定关键字的所有值
         List<String> titles =  (List<String>) JSONPath.read(jsonStr, "store.book.title");
         System.out.println(titles);
         
@@ -43,7 +45,7 @@ public class JsonPath {
         System.out.println(prices);
         
         //多层结构 相对路径
-        List<String> prices2 =  (List<String>) JSONPath.read(jsonStr, "..price");
+        List<String> prices2 =  (List<String>) JSONPath.read(jsonStr, "..book.price");
         System.out.println(prices2);
        
 

@@ -1,8 +1,12 @@
 package com.apitest.excel;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONPath;
 import com.apitest.convert.DateConvert;
+import com.apitest.utils.StringMapUtils;
 import com.github.crab2died.ExcelUtils;
 import com.github.crab2died.exceptions.Excel4JException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import java.io.File;
@@ -19,7 +23,7 @@ public class Excel4jTest {
         //获取当前工程的路径
         String basePath = System.getProperty("user.dir") + File.separator;
         // 获取被读取文件的路径
-        String filePath = basePath + "data" + File.separator + "apitest2.xlsx";
+        String filePath = basePath + "data" + File.separator + "apitest7.xlsx";
         // 获取导出文件的路径
 
         String exportPath = basePath + "report" + File.separator;
@@ -30,6 +34,22 @@ public class Excel4jTest {
             // 将测试用例按照顺序排序
             Collections.sort(testCases);
             for (TestApi testCase: testCases) {
+                // 将resultjson进行非空判断
+                if(StringUtils.isNotEmpty(testCase.getResultJson())) {
+                    String resultJson = "{\n" +
+                            "\t\"msg\": \"登录成功\",\n" +
+                            "\t\"uid\": \"9CC972DFA2D4481F89841A46FD1B3E7B\",\n" +
+                            "\t\"code\": \"1\"\n" +
+                            "}";
+                    // 将resultJson转化为json对象
+                    String uid = (String) JSONPath.read(resultJson,"uid");
+                    String code = (String) JSONPath.read(resultJson,"code");
+                    Map<String,Object> resultJsonMap = StringMapUtils.convert(testCase.getResultJson(),";");
+                    // map替换
+                    resultJsonMap.replace("id1",uid);
+                    resultJsonMap.replace("code1",code);
+                    System.out.println(resultJsonMap);
+                }
                 System.out.println(testCase);
             }
         } catch (Excel4JException | IOException | InvalidFormatException e) {

@@ -1,13 +1,10 @@
-package utils;
+package com.apitest.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -35,13 +32,14 @@ public class ExcelToMapUtils {
 
 			for (int i = 0; i < sheet.getLastRowNum(); i++) {
 				Row currentRow = sheet.getRow(i + 1);
-				Map<String, Object> map = new HashMap<String, Object>();
+				Map<String, Object> map = new LinkedHashMap<String, Object>();
 				for (int j = 0; j < currentRow.getLastCellNum(); j++) {
 					map.put(keys.get(j), getValue(currentRow.getCell(j)));
 				}
 				mapList.add(map);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new RuntimeException("excel解析出错");
 		} finally {
 			try {
@@ -56,6 +54,9 @@ public class ExcelToMapUtils {
 	}
 
 	private static Object getValue(Cell cell) {
+		if(cell == null) {
+			return "";
+		}
 		if (cell.getCellTypeEnum() == CellType.BOOLEAN) {
 			return cell.getBooleanCellValue();
 		} else if (cell.getCellTypeEnum() == CellType.NUMERIC) {

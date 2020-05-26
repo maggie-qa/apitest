@@ -1,8 +1,11 @@
 package com.apitest.excel;
 
 import com.apitest.convert.IsRunConvert;
+import com.apitest.convert.ReadConvert;
 import com.github.crab2died.annotation.ExcelField;
 import com.github.crab2died.converter.ReadConvertible;
+
+import java.util.Objects;
 
 public class TestApi implements Comparable<TestApi>{
     /**
@@ -33,8 +36,92 @@ public class TestApi implements Comparable<TestApi>{
     /**
      * 入参
      */
-    @ExcelField(title = "参数")
+    @ExcelField(title = "参数",readConverter = ReadConvert.class)  // 通过反射获取数据
     private String params;
+    /**
+     * header
+     */
+    @ExcelField(title = "头部")
+    private String header;
+
+    @ExcelField(title = "返回结果从json提取")
+    private String resultJson;
+
+    @ExcelField(title = "返回结果校验")
+    private String checkJson;
+
+    @ExcelField(title = "返回结果校验")
+    private String checkResult;
+
+    public String getCheckResult() {
+        return checkResult;
+    }
+
+    public void setCheckResult(String checkResult) {
+        this.checkResult = checkResult;
+    }
+
+    public String getCheckJson() {
+        return checkJson;
+    }
+
+    public void setCheckJson(String checkJson) {
+        this.checkJson = checkJson;
+    }
+
+    public String getResultJson() {
+        return resultJson;
+    }
+
+    public void setResultJson(String resultJson) {
+        this.resultJson = resultJson;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TestApi)) return false;
+        TestApi testApi = (TestApi) o;
+        return isRun == testApi.isRun &&
+                getOrder() == testApi.getOrder() &&
+                Objects.equals(getTestCase(), testApi.getTestCase()) &&
+                Objects.equals(getType(), testApi.getType()) &&
+                Objects.equals(getUrl(), testApi.getUrl()) &&
+                Objects.equals(getParams(), testApi.getParams()) &&
+                Objects.equals(getHeader(), testApi.getHeader()) &&
+                Objects.equals(getResultJson(), testApi.getResultJson()) &&
+                Objects.equals(getCheckJson(), testApi.getCheckJson()) &&
+                Objects.equals(getCheckResult(), testApi.getCheckResult());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(isRun, getOrder(), getTestCase(), getType(), getUrl(), getParams(), getHeader(), getResultJson(), getCheckJson(), getCheckResult());
+    }
+
+    @Override
+    public String toString() {
+        return "TestApi{" +
+                "isRun=" + isRun +
+                ", order=" + order +
+                ", testCase='" + testCase + '\'' +
+                ", type='" + type + '\'' +
+                ", url='" + url + '\'' +
+                ", params='" + params + '\'' +
+                ", header='" + header + '\'' +
+                ", resultJson='" + resultJson + '\'' +
+                ", checkJson='" + checkJson + '\'' +
+                ", checkResult='" + checkResult + '\'' +
+                '}';
+    }
+
+    public String getHeader() {
+        return header;
+    }
+
+    public void setHeader(String header) {
+        this.header = header;
+    }
 
     public boolean getIsRun() {
         return isRun;
@@ -82,18 +169,6 @@ public class TestApi implements Comparable<TestApi>{
 
     public void setParams(String params) {
         this.params = params;
-    }
-
-    @Override
-    public String toString() {
-        return "TestApi{" +
-                "isRun=" + isRun +
-                ", order=" + order +
-                ", testCase='" + testCase + '\'' +
-                ", type='" + type + '\'' +
-                ", url='" + url + '\'' +
-                ", params='" + params + '\'' +
-                '}';
     }
 
     public int compareTo(TestApi o) {
