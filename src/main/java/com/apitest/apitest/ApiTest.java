@@ -65,9 +65,14 @@ public class ApiTest {
                         System.out.println(result);
                         // 数据提取
                         ParamUtils.addFromJson(result,testCase.getResultJson());
-                        System.out.println(CheckPointUtils.check(result,testCase.getCheckJson()).getMsg());
+                        if(StringUtils.isNoneEmpty(testCase.getCheckJson())) {
+                            System.out.println("检查点不为空============");
+                            System.out.println(CheckPointUtils.check(result,testCase.getCheckJson()).getMsg());
+
+                        }
                         testCase.setCheckResult(CheckPointUtils.check(result,testCase.getCheckJson()).getMsg());
                         allResult.add(testCase);
+
                     }
                 }
                 ParamUtils.clear();
@@ -95,6 +100,7 @@ public class ApiTest {
 //        return str;
 //    }
 
+    // 参数化支持
     public static void replace(TestApi testCase) {
         // 替换url
         testCase.setUrl(ParamUtils.replace(testCase.getUrl()));
@@ -102,6 +108,8 @@ public class ApiTest {
         testCase.setParams(ParamUtils.replace(testCase.getParams()));
         // 替换头部
         testCase.setHeader(ParamUtils.replace(testCase.getHeader()));
+        // 替换checkpoint
+        testCase.setCheckJson(ParamUtils.replace(testCase.getCheckJson()));
 
     }
 }
